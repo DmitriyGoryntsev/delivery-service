@@ -38,7 +38,7 @@ func NewRouter(rConfig RouterConfig, logger *logger.Logger) *Router {
 }
 
 func (r *Router) Run() error {
-	return r.router.Start(fmt.Sprintf("%s:%s", r.config.Host, r.config.Port))
+	return r.router.Start(fmt.Sprintf("localhost:%s", r.config.Port))
 }
 
 func (r *Router) ShuttingDown(ctx context.Context) error {
