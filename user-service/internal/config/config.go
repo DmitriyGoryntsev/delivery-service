@@ -34,11 +34,22 @@ type JWT struct {
 	RefreshExpiry time.Duration `env:"JWT_REFRESH_EXPIRY" env-default:"24h"`
 }
 
+type LoggerConfig struct {
+	Level            string   `env:"LOG_LEVEL" env-default:"info" validate:"oneof=debug info warn error dpanic panic fatal"`
+	Format           string   `env:"LOG_FORMAT" env-default:"console" validate:"oneof=console json"`
+	OutputPaths      []string `env:"LOG_OUTPUT_PATHS" env-default:"stdout" env-separator:","`
+	ErrorOutputPaths []string `env:"LOG_ERROR_OUTPUT_PATHS" env-default:"stderr" env-separator:","`
+	Development      bool     `env:"LOG_DEVELOPMENT" env-default:"false"`
+	EnableStacktrace bool     `env:"LOG_ENABLE_STACKTRACE" env-default:"false"`
+	TimeFormat       string   `env:"LOG_TIME_FORMAT" env-default:"iso8601" validate:"oneof=iso8601 rfc3339 epoch millis"`
+}
+
 type Config struct {
 	Env        string           `env:"ENV" env-default:"development" validate:"oneof=development production"`
 	JWT        JWT              `env-prefix:"JWT_"`
 	HTTPServer HTTPServerConfig `env-prefix:"HTTP_SERVER_"`
 	Postgres   PostgresConfig   `env-prefix:"POSTGRES_"`
+	Logger     LoggerConfig     `env-prefix:"LOG_"`
 }
 
 func New() (*Config, error) {
